@@ -9,7 +9,22 @@ const getTodaysDate = () => {
 }
 
 
-const searchHistory = {};
+let searchHistory = [];
+if (JSON.parse(localStorage.getItem("searchHistory"))) {
+    searchHistory = JSON.parse(localStorage.getItem("searchHistory")); 
+
+    $("#cities-wrapper").empty();
+    searchHistory.forEach(city => {
+        let button = $(`<button id="${city}">`);
+        $("#cities-wrapper").append(button);
+        $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
+        $(`#${city}`).text(city);
+        $(`#${city}`).on('click', function() {
+            queryWeather(city)
+        });
+    })
+}
+
 
 // Update city and call query with fetch
 const queryWeather = (citName) => {
@@ -40,7 +55,8 @@ const queryWeather = (citName) => {
         })
         .then(function(oneCallSuccessData) {
             weatherData = oneCallSuccessData;
-            renderInfo(citName, weatherData)
+            renderInfo(citName, weatherData);
+            console.log(citName, oneCallSuccessData)
         })
         .catch((err) => {
             // Add feedback for user;
@@ -51,6 +67,7 @@ const queryWeather = (citName) => {
         // Add feedback for user;
         // Possible city incorrectly entered or not a city
     });
+    
 }
 
 
@@ -74,10 +91,11 @@ const sanitiseEntry = (event) => {
 
 const renderInfo = (city, weather) => {
     const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
+    city = uppercaseWords(city)
 
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
-        $("#cityName").text(`${uppercaseWords(city)} `);
+        $("#cityName").text(`${city} `);
         $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         // <!-- Temp -->
@@ -103,7 +121,7 @@ const renderInfo = (city, weather) => {
         
         
     let childArray = $("#searchForecast").children().children()
-    console.log(weather)
+    
     $(`#${childArray[0].id}`).empty();
     $(`#${childArray[0].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[1].dt)}</h5>`);
     $(`#${childArray[0].id}`).append(`<img src="${iconURL}${weather.daily[1].weather[0].icon}@2x.png" class="card-text"></img>`);
@@ -139,8 +157,53 @@ const renderInfo = (city, weather) => {
     $(`#${childArray[4].id}`).append(`<p class="card-text">Wind: ${weather.daily[5].wind_speed}</p>`);
     $(`#${childArray[4].id}`).append(`<p class="card-text">Humidity: ${weather.daily[5].humidity}</p>`);
         
-    
+    updateHistory(city);
 
+}
+
+const updateHistory = (citySearched) => {
+    
+    if (JSON.parse(localStorage.getItem("searchHistory"))) {
+        searchHistory = JSON.parse(localStorage.getItem("searchHistory")); 
+    }
+    
+    // Add city searched to a library
+    if (JSON.parse(localStorage.getItem("searchHistory")) == null) {
+
+        searchHistory.push(citySearched);
+        
+        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+        // Render cities to page and add event listener to them
+        $("#cities-wrapper").empty();
+        searchHistory.forEach(city => {
+            let button = $(`<button id="${city}">`);
+            $("#cities-wrapper").append(button);
+            $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
+            $(`#${city}`).text(city);
+            $(`#${city}`).on('click', function() {
+                queryWeather(city)
+            });
+        })
+
+    } else if (!JSON.parse(localStorage.getItem("searchHistory")).includes(citySearched)) {
+        
+        searchHistory.push(citySearched);
+        
+        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+        // Render cities to page and add event listener to them
+        $("#cities-wrapper").empty();
+        searchHistory.forEach(city => {
+            let button = $(`<button id="${city}">`);
+            $("#cities-wrapper").append(button);
+            $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
+            $(`#${city}`).text(city);
+            $(`#${city}`).on('click', function() {
+                queryWeather(city)
+            });
+        })
+    }
 }
 
 const convertUnix = (unix) => {
@@ -155,3 +218,8 @@ const convertUnix = (unix) => {
 
 // Event Listeners
 $("#citysearch_submit").on('click', sanitiseEntry);
+$("#clearHistory").on('click', function() {
+    $("#cities-wrapper").empty();
+    searchHistory = [];
+    localStorage.clear()
+})
