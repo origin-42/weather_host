@@ -2,6 +2,11 @@ let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
 let city;
 let queryURLWeather = `http://api.openweathermap.org/data/2.5/weather`;
 let queryURLForcast = `http://api.openweathermap.org/data/2.5/forecast`;
+const getTodaysDate = () => {
+    let todaysDate = new Date();
+    return todaysDate;
+}
+
 
 const searchHistory = {};
 
@@ -12,7 +17,7 @@ const queryWeather = (citName) => {
     let weatherData;
     let forecastData;
 
-    fetch(`${queryURLForcast}?q=${city}&appid=${apiKey}`)
+    fetch(`${queryURLWeather}?q=${city}&appid=${apiKey}`)
     .then(function (response) {
         if (response.ok) {
             return response.json();
@@ -24,7 +29,7 @@ const queryWeather = (citName) => {
         weatherData = weatherSuccessData;
     }).then(function() {
 
-        fetch(`${queryURLWeather}?q=${city}&appid=${apiKey}`)
+        fetch(`${queryURLForcast}?q=${city}&appid=${apiKey}`)
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -39,7 +44,7 @@ const queryWeather = (citName) => {
             // Add feedback for user;
             // Possible city incorrectly entered or not a city
         }).then( function() {
-            addSearchHistory(citName, weatherData, forecastData);
+            renderInfo(citName, weatherData, forecastData);
         });
     })
     .catch((err) => {
@@ -74,14 +79,29 @@ const sanitiseEntry = (event) => {
     
 } 
 
-const addSearchHistory = (city, weather, forecast) => {
+const renderInfo = (city, weather, forecast) => {
+    console.log(weather.main.temp)
+
+    let timeStamp = weather.dt;
+    let date = new Date(timeStamp * 1000);
+    let day =  date.getDate();
+    let month = date.getMonth()+1;
+    let year = date.getFullYear();
+    let todaysDate = `${day} ${month} ${year}`;
 
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
+        $("#cityName").text(city);
+        $("#searchDate").text(todaysDate);
+        $("#weatherIcon").attr("src", weather.weather.icon);
         // <!-- Temp -->
+        $("#cityTemp").text(weather.main.temp);
         // <!-- Wind -->
+        $("#cityWind").text(weather.wind.speed);
         // <!-- Humidity -->
+        $("#cityHimidity").text(weather.main.humidity);
         // <!-- UV Index -->
+        
     
     // <!-- 5 day forecase -->
         // <!-- Day 1 -->
@@ -95,7 +115,7 @@ const addSearchHistory = (city, weather, forecast) => {
         // <!-- Day 4 -->
         // <!-- Day 5 -->
         
-    searchHistory["cities"] = {"city": city, "weather": weather, "forecast": forecast,}
+    searchHistory["cities"] = {"city": city, "weatherData": weather, "forecastData": forecast,}
 
 }
 
