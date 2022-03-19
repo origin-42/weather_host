@@ -3,6 +3,7 @@ let city;
 let queryURLOneCall = `https://api.openweathermap.org/data/2.5/onecall`;
 let getCoords = `https://api.openweathermap.org/data/2.5/weather`;
 let iconURL = `https://openweathermap.org/img/wn/`;
+
 const getTodaysDate = () => {
     let todaysDate = new Date();
     return todaysDate;
@@ -20,6 +21,7 @@ if (JSON.parse(localStorage.getItem("searchHistory"))) {
         $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
         $(`#${city}`).text(city);
         $(`#${city}`).on('click', function() {
+            $("#citysearch").val(`${city}`);
             queryWeather(city)
         });
     })
@@ -28,6 +30,7 @@ if (JSON.parse(localStorage.getItem("searchHistory"))) {
 
 // Update city and call query with fetch
 const queryWeather = (citName) => {
+    city = citName;
 
     // Collect data
     let weatherData;
@@ -182,6 +185,7 @@ const updateHistory = (citySearched) => {
             $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
             $(`#${city}`).text(city);
             $(`#${city}`).on('click', function() {
+                $("#citysearch").val(`${city}`);
                 queryWeather(city)
             });
         })
@@ -200,6 +204,7 @@ const updateHistory = (citySearched) => {
             $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
             $(`#${city}`).text(city);
             $(`#${city}`).on('click', function() {
+                $("#citysearch").val(`${city}`);
                 queryWeather(city)
             });
         })
