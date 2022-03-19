@@ -1,0 +1,6 @@
+.citySearch {
+    cursor: pointer;
+}
+.card-body * {
+    font-weight: bold;
+}

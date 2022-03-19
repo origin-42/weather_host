@@ -14,28 +14,26 @@
 </head>
 <body>
     <main>
-        <h1>Weather Host</h1>
-        <div class="container row">
-            <section class="container">
-                <article class="column search-wrapper">
+        <h1 class="text-center bg-info bg-gradient p-3 text-light border-bottom border-primary">Weather Host</h1>
+        <div class="container-fluid row">
+            <section class="col-3 container">
+                <article class="column search-wrapper mb-3 border-bottom border-primary pb-3">
                     <!-- Search for a City -->
                     <label class="col" for="citysearch" title="Use only letters">Search for a City:</label>
-                    <input class="col" name="citysearch" id="citysearch" type="text">
-                    <button class="col" id="citysearch_submit" class="" type="submit">Search</button>
+                    <input class="col mb-2" name="citysearch" id="citysearch" type="text">
+                    <button class="col bg-primary rounded text-light" id="citysearch_submit" class="" type="submit">Search</button>
                 </article>
                 <article class="column cities-wrapper">
-                    <p id="theCityName" class="col citySearch"><!-- cityName -->London</p>
-                    <p id="theCityName" class="col citySearch"><!-- cityName -->Sandiego</p>
-                    <p id="theCityName" class="col citySearch"><!-- cityName -->Perth</p>
+                    <button id="theCityName" class="col citySearch bg-info bg-gradient text-center rounded text-light"><!-- cityName -->London</button>
                 </article>
             </section>
     
             <!-- Search Information -->
-            <section class="container">
+            <section class="col-9 container">
                 <!-- Displayed information for City -->
-                <article class="column searchResults">
+                <article class="column searchResults border border-2 mb-2 p-2">
                     <!-- City name, date, and weather icon -->
-                    <h2><span id="cityName"></span><span id="searchDate"></span><span id="weatherIcon"></span></h2>
+                    <h2><span id="cityName">City Name </span>(<span id="searchDate">City Date</span>) <span id="weatherIcon">Icon</span></h2>
                     <!-- Temp -->
                     <p><span>Temp: </span><span id="cityTemp"></span></p>
                     <!-- Wind -->
@@ -47,9 +45,9 @@
                 </article>
 
                 <!-- 5 day forecase -->
-                <section class="column searchForecast">
+                <section class="container row justify-content-between searchForecast">
                     <!-- Day 1 -->
-                    <article class="card" style="width: 18rem;">
+                    <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
                         <div id="dayTwo" class="card-body">
                           <h5 class="card-title">Date</h5>
                           <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
@@ -58,8 +56,8 @@
                           <p class="card-text">Humidity</p>
                         </div>
                     </article>
-                    <article class="card" style="width: 18rem;">
-                        <div id="dayTwo" class="card-body">
+                    <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
+                        <div id="dayThree" class="card-body">
                           <h5 class="card-title">Date</h5>
                           <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
                           <p class="card-text">Temp</p>
@@ -67,8 +65,8 @@
                           <p class="card-text">Humidity</p>
                         </div>
                     </article>
-                    <article class="card" style="width: 18rem;">
-                        <div id="dayTwo" class="card-body">
+                    <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
+                        <div id="dayFour" class="card-body">
                           <h5 class="card-title">Date</h5>
                           <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
                           <p class="card-text">Temp</p>
@@ -76,8 +74,8 @@
                           <p class="card-text">Humidity</p>
                         </div>
                     </article>
-                    <article class="card" style="width: 18rem;">
-                        <div id="dayTwo" class="card-body">
+                    <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
+                        <div id="dayFive" class="card-body">
                           <h5 class="card-title">Date</h5>
                           <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
                           <p class="card-text">Temp</p>
@@ -85,8 +83,8 @@
                           <p class="card-text">Humidity</p>
                         </div>
                     </article>
-                    <article id="dayTwo" class="card" style="width: 18rem;">
-                        <div class="card-body">
+                    <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
+                        <div id="daySix" class="card-body">
                           <h5 class="card-title">Date</h5>
                           <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
                           <p class="card-text">Temp</p>
