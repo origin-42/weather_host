@@ -1,7 +1,8 @@
 let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
 let city;
 let queryURLWeather = `http://api.openweathermap.org/data/2.5/weather`;
-let queryURLForcast = `http://api.openweathermap.org/data/2.5/forecast`;
+let queryURLOneCall = `http://api.openweathermap.org/data/2.5/onecall`;
+let queryURLForcast = `http://api.openweathermap.org/data/2.5/forecast/daily`;
 const getTodaysDate = () => {
     let todaysDate = new Date();
     return todaysDate;
@@ -29,7 +30,7 @@ const queryWeather = (citName) => {
         weatherData = weatherSuccessData;
     }).then(function() {
 
-        fetch(`${queryURLForcast}?q=${city}&appid=${apiKey}`)
+        fetch(`${queryURLForcast}?q=${city}&cnt={5}&appid=${apiKey}`)
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -43,9 +44,30 @@ const queryWeather = (citName) => {
         .catch((err) => {
             // Add feedback for user;
             // Possible city incorrectly entered or not a city
-        }).then( function() {
-            renderInfo(citName, weatherData, forecastData);
-        });
+        }).then(function() {
+
+            let latitude = weatherData.coord.lat;
+            let longitude = weatherData.coord.lon;
+
+            fetch(`${queryURLOneCall}?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error (err);
+                }
+            })
+            .then(function(oneCallData) {
+                
+                weatherData = oneCallData;
+            })
+            .catch((err) => {
+                // Add feedback for user;
+                // Possible city incorrectly entered or not a city
+            }).then( function() {
+                renderInfo(citName, weatherData, forecastData);
+            });
+        })
     })
     .catch((err) => {
         // Add feedback for user;
@@ -80,31 +102,35 @@ const sanitiseEntry = (event) => {
 } 
 
 const renderInfo = (city, weather, forecast) => {
-    console.log(weather.main.temp)
 
-    let timeStamp = weather.dt;
+    let timeStamp = weather.current.dt;
     let date = new Date(timeStamp * 1000);
-    let day =  date.getDate();
-    let month = date.getMonth()+1;
+    let day =  `${date.getDate()}`;
+    let month = `${date.getMonth()+1}`;
     let year = date.getFullYear();
-    let todaysDate = `${day} ${month} ${year}`;
+    let todaysDate = ` ${day}/${month}/${year} `;
 
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
-        $("#cityName").text(city);
+        $("#cityName").text(`${city} `);
         $("#searchDate").text(todaysDate);
-        $("#weatherIcon").attr("src", weather.weather.icon);
+        $("#weatherIcon").attr("src", weather.current.weather.icon);
         // <!-- Temp -->
-        $("#cityTemp").text(weather.main.temp);
+        $("#cityTemp").text(weather.current.temp);
         // <!-- Wind -->
-        $("#cityWind").text(weather.wind.speed);
+        $("#cityWind").text(weather.current.wind_speed);
         // <!-- Humidity -->
-        $("#cityHimidity").text(weather.main.humidity);
+        $("#cityHimidity").text(weather.current.humidity);
         // <!-- UV Index -->
+        $("#cityUVIndex").text(weather.current.uvi);
         
     
     // <!-- 5 day forecase -->
+    for (let i = 0; i < forecast.list.length; i++) {
+        console.log(forecast.list[i].dt_txt)
+    }
         // <!-- Day 1 -->
+
             // <!-- Date -->
             // <!-- Weather Rep Icon -->
             // <!-- Temp -->
