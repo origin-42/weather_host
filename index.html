@@ -33,64 +33,34 @@
                 <!-- Displayed information for City -->
                 <article class="column searchResults border border-2 mb-2 p-2">
                     <!-- City name, date, and weather icon -->
-                    <h2><span id="cityName">City Name </span>(<span id="searchDate">City Date</span>) <img id="weatherIcon" src="">Icon</img></h2>
+                    <h2><span id="cityName"></span><span id="searchDate"></span><img id="weatherIcon" src=""></img></h2>
                     <!-- Temp -->
-                    <p><span>Temp: </span><span id="cityTemp"></span></p>
+                    <p><span id="cityTemp"></span></p>
                     <!-- Wind -->
-                    <p><span>Wind: </span><span id="cityWind"></span></p>
+                    <p><span id="cityWind"></span></p>
                     <!-- Humidity -->
-                    <p><span>Himidity: </span><span id="cityHimidity"></span></p>
+                    <p><span id="cityHimidity"></span></p>
                     <!-- UV Index -->
-                    <p><span>UVIndex: </span><span id="cityUVIndex"></span></p>
+                    <p><span id="cityUVIndex"></span><span id="uvBackground"></span></p>
                 </article>
 
                 <!-- 5 day forecase -->
-                <section class="container row justify-content-between searchForecast">
+                <section id="searchForecast" class="container row justify-content-between searchForecast">
                     <!-- Day 1 -->
                     <article class="col card ml-1 bg-secondary text-light" style="width: 18rem;">
-                        <div id="dayTwo" class="card-body">
-                          <h5 class="card-title">Date</h5>
-                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
-                          <p class="card-text">Temp</p>
-                          <p class="card-text">Wind</p>
-                          <p class="card-text">Humidity</p>
-                        </div>
+                        <div id="dayTwo" class="card-body"></div>
                     </article>
                     <article class="col card ml-1 bg-secondary text-light fw-bold" style="width: 18rem;">
-                        <div id="dayThree" class="card-body">
-                          <h5 class="card-title">Date</h5>
-                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
-                          <p class="card-text">Temp</p>
-                          <p class="card-text">Wind</p>
-                          <p class="card-text">Humidity</p>
-                        </div>
+                        <div id="dayThree" class="card-body"></div>
                     </article>
                     <article class="col card ml-1 bg-secondary text-light" style="width: 18rem;">
-                        <div id="dayFour" class="card-body">
-                          <h5 class="card-title">Date</h5>
-                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
-                          <p class="card-text">Temp</p>
-                          <p class="card-text">Wind</p>
-                          <p class="card-text">Humidity</p>
-                        </div>
+                        <div id="dayFour" class="card-body"></div>
                     </article>
                     <article class="col card ml-1 bg-secondary text-light" style="width: 18rem;">
-                        <div id="dayFive" class="card-body">
-                          <h5 class="card-title">Date</h5>
-                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
-                          <p class="card-text">Temp</p>
-                          <p class="card-text">Wind</p>
-                          <p class="card-text">Humidity</p>
-                        </div>
+                        <div id="dayFive" class="card-body"></div>
                     </article>
                     <article class="col card ml-1 bg-secondary text-light" style="width: 18rem;">
-                        <div id="daySix" class="card-body">
-                          <h5 class="card-title">Date</h5>
-                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
-                          <p class="card-text">Temp</p>
-                          <p class="card-text">Wind</p>
-                          <p class="card-text">Humidity</p>
-                        </div>
+                        <div id="daySix" class="card-body"></div>
                     </article>
                 </section>
             </section>

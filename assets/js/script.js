@@ -1,8 +1,8 @@
 let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
 let city;
-let queryURLWeather = `http://api.openweathermap.org/data/2.5/weather`;
 let queryURLOneCall = `http://api.openweathermap.org/data/2.5/onecall`;
-let queryURLForcast = `http://api.openweathermap.org/data/2.5/forecast/daily`;
+let getCoords = `http://api.openweathermap.org/data/2.5/weather`;
+let iconURL = `http://openweathermap.org/img/wn/`;
 const getTodaysDate = () => {
     let todaysDate = new Date();
     return todaysDate;
@@ -16,9 +16,8 @@ const queryWeather = (citName) => {
 
     // Collect data
     let weatherData;
-    let forecastData;
 
-    fetch(`${queryURLWeather}?q=${city}&appid=${apiKey}`)
+    fetch(`${getCoords}?q=${city}&appid=${apiKey}`)
     .then(function (response) {
         if (response.ok) {
             return response.json();
@@ -28,9 +27,10 @@ const queryWeather = (citName) => {
     })
     .then(function (weatherSuccessData) {
         weatherData = weatherSuccessData;
-    }).then(function() {
+        let lat = weatherData.coord.lat;
+        let lon = weatherData.coord.lon;
 
-        fetch(`${queryURLForcast}?q=${city}&cnt={5}&appid=${apiKey}`)
+        fetch(`${queryURLOneCall}?lat=${lat}&lon=${lon}&units={imperial}&appid=${apiKey}`)
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -38,48 +38,19 @@ const queryWeather = (citName) => {
                 throw new Error (err);
             }
         })
-        .then(function (forecastSuccessData) {
-            forecastData = forecastSuccessData;
+        .then(function(oneCallSuccessData) {
+            weatherData = oneCallSuccessData;
+            renderInfo(citName, weatherData)
         })
         .catch((err) => {
             // Add feedback for user;
             // Possible city incorrectly entered or not a city
-        }).then(function() {
-
-            let latitude = weatherData.coord.lat;
-            let longitude = weatherData.coord.lon;
-
-            fetch(`${queryURLOneCall}?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error (err);
-                }
-            })
-            .then(function(oneCallData) {
-                
-                weatherData = oneCallData;
-            })
-            .catch((err) => {
-                // Add feedback for user;
-                // Possible city incorrectly entered or not a city
-            }).then( function() {
-                renderInfo(citName, weatherData, forecastData);
-            });
-        })
+        });
     })
     .catch((err) => {
         // Add feedback for user;
         // Possible city incorrectly entered or not a city
     });
-
-    
-
-    // Call event handler success function. Which will;
-    
-    // take the data, call another function to handle adding that search into a history object
-    // Call function to extract from that object and display it's info in correct formatting.
 }
 
 
@@ -101,48 +72,85 @@ const sanitiseEntry = (event) => {
     
 } 
 
-const renderInfo = (city, weather, forecast) => {
-
-    let timeStamp = weather.current.dt;
-    let date = new Date(timeStamp * 1000);
-    let day =  `${date.getDate()}`;
-    let month = `${date.getMonth()+1}`;
-    let year = date.getFullYear();
-    let todaysDate = ` ${day}/${month}/${year} `;
+const renderInfo = (city, weather) => {
+    const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
 
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
-        $("#cityName").text(`${city} `);
-        $("#searchDate").text(todaysDate);
-        $("#weatherIcon").attr("src", weather.current.weather.icon);
+        $("#cityName").text(`${uppercaseWords(city)} `);
+        $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
+        $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         // <!-- Temp -->
-        $("#cityTemp").text(weather.current.temp);
+        $("#cityTemp").text(`Temperature: ${weather.current.temp}`);
         // <!-- Wind -->
-        $("#cityWind").text(weather.current.wind_speed);
+        $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed}`);
         // <!-- Humidity -->
-        $("#cityHimidity").text(weather.current.humidity);
+        $("#cityHimidity").text(`Humidity: ${weather.current.humidity}`);
         // <!-- UV Index -->
-        $("#cityUVIndex").text(weather.current.uvi);
+        $("#cityUVIndex").text(`UV Index: `);
+        $("#uvBackground").text(`${weather.current.uvi}`);
+        $("#uvBackground").addClass("rounded px-3 text-light");
+        $("#uvBackground").removeClass("bg-danger bg-warning bg-success");
+
+        if (weather.current.uvi > 7) {
+            $("#uvBackground").addClass("bg-danger");
+        } else if (weather.current.uvi > 2) {
+            $("#uvBackground").addClass("bg-warning");
+        } else if (weather.current.uvi < 3) {
+            $("#uvBackground").addClass("bg-success");
+        }
+
+        
+        
+    let childArray = $("#searchForecast").children().children()
+    console.log(weather)
+    $(`#${childArray[0].id}`).empty();
+    $(`#${childArray[0].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[1].dt)}</h5>`);
+    $(`#${childArray[0].id}`).append(`<img src="${iconURL}${weather.daily[1].weather[0].icon}@2x.png" class="card-text"></img>`);
+    $(`#${childArray[0].id}`).append(`<p class="card-text">Temp: ${weather.daily[1].temp.day}</p>`);
+    $(`#${childArray[0].id}`).append(`<p class="card-text">Wind: ${weather.daily[1].wind_speed}</p>`);
+    $(`#${childArray[0].id}`).append(`<p class="card-text">Humidity: ${weather.daily[1].humidity}</p>`);
+
+    $(`#${childArray[1].id}`).empty();
+    $(`#${childArray[1].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[2].dt)}</h5>`);
+    $(`#${childArray[1].id}`).append(`<img src="${iconURL}${weather.daily[2].weather[0].icon}@2x.png" class="card-text"></img>`);
+    $(`#${childArray[1].id}`).append(`<p class="card-text">Temp: ${weather.daily[2].temp.day}</p>`);
+    $(`#${childArray[1].id}`).append(`<p class="card-text">Wind: ${weather.daily[2].wind_speed}</p>`);
+    $(`#${childArray[1].id}`).append(`<p class="card-text">Humidity: ${weather.daily[2].humidity}</p>`);
+
+    $(`#${childArray[2].id}`).empty();
+    $(`#${childArray[2].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[3].dt)}</h5>`);
+    $(`#${childArray[2].id}`).append(`<img src="${iconURL}${weather.daily[3].weather[0].icon}@2x.png" class="card-text"></img>`);
+    $(`#${childArray[2].id}`).append(`<p class="card-text">Temp: ${weather.daily[3].temp.day}</p>`);
+    $(`#${childArray[2].id}`).append(`<p class="card-text">Wind: ${weather.daily[3].wind_speed}</p>`);
+    $(`#${childArray[2].id}`).append(`<p class="card-text">Humidity: ${weather.daily[3].humidity}</p>`);
+
+    $(`#${childArray[3].id}`).empty();
+    $(`#${childArray[3].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[4].dt)}</h5>`);
+    $(`#${childArray[3].id}`).append(`<img src="${iconURL}${weather.daily[4].weather[0].icon}@2x.png" class="card-text"></img>`);
+    $(`#${childArray[3].id}`).append(`<p class="card-text">Temp: ${weather.daily[4].temp.day}</p>`);
+    $(`#${childArray[3].id}`).append(`<p class="card-text">Wind: ${weather.daily[4].wind_speed}</p>`);
+    $(`#${childArray[3].id}`).append(`<p class="card-text">Humidity: ${weather.daily[4].humidity}</p>`);
+
+    $(`#${childArray[4].id}`).empty();
+    $(`#${childArray[4].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[5].dt)}</h5>`);
+    $(`#${childArray[4].id}`).append(`<img src="${iconURL}${weather.daily[5].weather[0].icon}@2x.png" class="card-text"></img>`);
+    $(`#${childArray[4].id}`).append(`<p class="card-text">Temp: ${weather.daily[5].temp.day}</p>`);
+    $(`#${childArray[4].id}`).append(`<p class="card-text">Wind: ${weather.daily[5].wind_speed}</p>`);
+    $(`#${childArray[4].id}`).append(`<p class="card-text">Humidity: ${weather.daily[5].humidity}</p>`);
         
     
-    // <!-- 5 day forecase -->
-    for (let i = 0; i < forecast.list.length; i++) {
-        console.log(forecast.list[i].dt_txt)
-    }
-        // <!-- Day 1 -->
 
-            // <!-- Date -->
-            // <!-- Weather Rep Icon -->
-            // <!-- Temp -->
-            // <!-- Wind -->
-            // <!-- Humidity -->
-        // <!-- Day 2 -->
-        // <!-- Day 3 -->
-        // <!-- Day 4 -->
-        // <!-- Day 5 -->
-        
-    searchHistory["cities"] = {"city": city, "weatherData": weather, "forecastData": forecast,}
+}
 
+const convertUnix = (unix) => {
+    let unixDate = unix;
+    let date = new Date(unixDate * 1000);
+    let day =  `${date.getDate()}`;
+    let month = `${date.getMonth()+1}`;
+    let year = date.getFullYear();
+    let format = `${day}/${month}/${year}`;
+    return format;
 }
 
 // Event Listeners
