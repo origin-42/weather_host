@@ -4,46 +4,99 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <!-- Reset -->
     <link rel="stylesheet" href="./assets/css/reset.css">
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Weather Host</title>
 </head>
 <body>
     <main>
-        <!-- Search Parametres -->
-            <!-- Search for a City -->
-                <label for="citysearch" title="Use only letters">Search for a City:</label>
-                <input name="citysearch" id="citysearch" type="text">
-                <button id="citysearch_submit" class="" type="submit">Search</button>
-
-            <!-- Previous Search History -->
-                <!-- Previous Search -->
-                <!-- Previous Search -->
-                <!-- Previous Search -->
-                <!-- ... -->
-
-        <!-- Search Information -->
-
-            <!-- Displayed information for City -->
-                <!-- City name, date, and weather icon -->
-                <!-- Temp -->
-                <!-- Wind -->
-                <!-- Humidity -->
-                <!-- UV Index -->
-
-            <!-- 5 day forecase -->
-                <!-- Day 1 -->
-                    <!-- Date -->
-                    <!-- Weather Rep Icon -->
+        <h1>Weather Host</h1>
+        <div class="container row">
+            <section class="container">
+                <article class="column search-wrapper">
+                    <!-- Search for a City -->
+                    <label class="col" for="citysearch" title="Use only letters">Search for a City:</label>
+                    <input class="col" name="citysearch" id="citysearch" type="text">
+                    <button class="col" id="citysearch_submit" class="" type="submit">Search</button>
+                </article>
+                <article class="column cities-wrapper">
+                    <p id="theCityName" class="col citySearch"><!-- cityName -->London</p>
+                    <p id="theCityName" class="col citySearch"><!-- cityName -->Sandiego</p>
+                    <p id="theCityName" class="col citySearch"><!-- cityName -->Perth</p>
+                </article>
+            </section>
+    
+            <!-- Search Information -->
+            <section class="container">
+                <!-- Displayed information for City -->
+                <article class="column searchResults">
+                    <!-- City name, date, and weather icon -->
+                    <h2><span id="cityName"></span><span id="searchDate"></span><span id="weatherIcon"></span></h2>
                     <!-- Temp -->
+                    <p><span>Temp: </span><span id="cityTemp"></span></p>
                     <!-- Wind -->
+                    <p><span>Wind: </span><span id="cityWind"></span></p>
                     <!-- Humidity -->
-                <!-- Day 2 -->
-                <!-- Day 3 -->
-                <!-- Day 4 -->
-                <!-- Day 5 -->
+                    <p><span>Himidity: </span><span id="cityHimidity"></span></p>
+                    <!-- UV Index -->
+                    <p><span>UVIndex: </span><span id="cityUVIndex"></span></p>
+                </article>
 
+                <!-- 5 day forecase -->
+                <section class="column searchForecast">
+                    <!-- Day 1 -->
+                    <article class="card" style="width: 18rem;">
+                        <div id="dayTwo" class="card-body">
+                          <h5 class="card-title">Date</h5>
+                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
+                          <p class="card-text">Temp</p>
+                          <p class="card-text">Wind</p>
+                          <p class="card-text">Humidity</p>
+                        </div>
+                    </article>
+                    <article class="card" style="width: 18rem;">
+                        <div id="dayTwo" class="card-body">
+                          <h5 class="card-title">Date</h5>
+                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
+                          <p class="card-text">Temp</p>
+                          <p class="card-text">Wind</p>
+                          <p class="card-text">Humidity</p>
+                        </div>
+                    </article>
+                    <article class="card" style="width: 18rem;">
+                        <div id="dayTwo" class="card-body">
+                          <h5 class="card-title">Date</h5>
+                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
+                          <p class="card-text">Temp</p>
+                          <p class="card-text">Wind</p>
+                          <p class="card-text">Humidity</p>
+                        </div>
+                    </article>
+                    <article class="card" style="width: 18rem;">
+                        <div id="dayTwo" class="card-body">
+                          <h5 class="card-title">Date</h5>
+                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
+                          <p class="card-text">Temp</p>
+                          <p class="card-text">Wind</p>
+                          <p class="card-text">Humidity</p>
+                        </div>
+                    </article>
+                    <article id="dayTwo" class="card" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title">Date</h5>
+                          <p class="card-text"><!-- Weather Rep Icon -->Icon</p>
+                          <p class="card-text">Temp</p>
+                          <p class="card-text">Wind</p>
+                          <p class="card-text">Humidity</p>
+                        </div>
+                    </article>
+                </section>
+            </section>
+        </div>
     </main>
 
 
