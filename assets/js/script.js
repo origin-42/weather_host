@@ -1,8 +1,8 @@
 let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
 let city;
-let queryURLOneCall = `http://api.openweathermap.org/data/2.5/onecall`;
-let getCoords = `http://api.openweathermap.org/data/2.5/weather`;
-let iconURL = `http://openweathermap.org/img/wn/`;
+let queryURLOneCall = `https://api.openweathermap.org/data/2.5/onecall`;
+let getCoords = `https://api.openweathermap.org/data/2.5/weather`;
+let iconURL = `https://openweathermap.org/img/wn/`;
 const getTodaysDate = () => {
     let todaysDate = new Date();
     return todaysDate;
