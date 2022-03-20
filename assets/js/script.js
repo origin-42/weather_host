@@ -143,7 +143,7 @@ const renderInfo = (city, weather) => {
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
         $("#cityName").text(`${city}, ${weather.timezone} `);
-        $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
+        $("#searchDate").text(`(${convertUnix(weather.current.dt, 0)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         $("#cityTemp").text(`Temperature: ${weather.current.temp} Celsius`);
         $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed} M/S`);
@@ -168,7 +168,7 @@ const renderInfo = (city, weather) => {
 
     for (let i = 0; i < childArray.length; i++) {
         $(`#${childArray[i].id}`).empty();
-        $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt)}</h5>`);
+        $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt, 1)}</h5>`);
         $(`#${childArray[i].id}`).append(`<img src="${iconURL}${dailyWeather[0].weather[0].icon}@2x.png" class="card-text"></img>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${dailyWeather[0].temp.day} Celsius</p>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed} M/S</p>`);
@@ -208,11 +208,11 @@ const updateHistory = (citySearched) => {
 }
 
 // Convert passed in unix time
-const convertUnix = (unix) => {
+const convertUnix = (unix, num) => {
     let unixDate = unix;
     let date = new Date(unixDate * 1000);
     let day =  `${date.getDate()}`;
-    let month = `${date.getMonth()+1}`;
+    let month = `${date.getMonth()+num}`;
     let year = date.getFullYear();
     let format = `${day}/${month}/${year}`;
     return format;
