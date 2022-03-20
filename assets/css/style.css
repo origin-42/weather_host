@@ -5,8 +5,14 @@
     font-weight: bold;
 }
 [data-hide="hidden"] {
-    display: none;
+    visibility: hidden;
 }
 [data-hide="visible"] {
-    display: block;
+    visibility: visible;
+}
+#google {
+    cursor: pointer;
+}
+u {
+    cursor: pointer;
 }

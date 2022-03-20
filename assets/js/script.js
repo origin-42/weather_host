@@ -1,8 +1,8 @@
 let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
-let city;
 let queryURLOneCall = `https://api.openweathermap.org/data/2.5/onecall`;
 let getCoords = `https://api.openweathermap.org/data/2.5/weather`;
 let iconURL = `https://openweathermap.org/img/wn/`;
+let googleFailedQuery = `https://maps.google.com/`;
 
 const getTodaysDate = () => {
     let todaysDate = new Date();
@@ -24,11 +24,23 @@ const renderCities = (history) => {
     })
 }
 
-const toolTip = (err) => {
-    $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
+const toolTip = (err, query) => {
+    if (err === "Is this a city?") {
+        $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
+        $("#err").after(`<p id="${query}" class="text-center bg-warning rounded text-light"><u>Google it?</u></p>`);
+        $(`#${query}`).on('click', function() {
+            window.open(`${googleFailedQuery}?q=${query}`,'_blank');
+        })
         setTimeout(function() {
             $("#err").remove();
-    },2000);
+            $(`#${query}`).remove();
+        },5000);
+    } else {
+        $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
+        setTimeout(function() {
+            $("#err").remove();
+        },2000);
+    }
 }
 
 let searchHistory = [];
@@ -71,11 +83,11 @@ const queryWeather = (cityName) => {
             renderInfo(cityName, weatherData);
         })
         .catch((err) => {
-            toolTip("Is this a city?");
+            toolTip("Is this a city?", cityName);
         });
     })
     .catch((err) => {
-        toolTip("Is this a city?");
+        toolTip("Is this a city?", cityName);
     });
     
 }
@@ -111,6 +123,10 @@ const sanitiseEntry = (event) => {
 } 
 
 const renderInfo = (city, weather) => {
+    // Add style to page
+    if (weather && $("#searchContainer").attr('data-hide', 'hidden')) {
+        $("#searchContainer").attr('data-hide', 'visible');
+    }
     
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
