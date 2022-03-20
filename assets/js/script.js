@@ -54,6 +54,9 @@ if (JSON.parse(localStorage.getItem("searchHistory"))) {
 
     renderCities(searchHistory);
 }
+if (searchHistory) {
+    $("#clearHistory").text("Clear History")
+};
 
 
 // Update city and call user city query
