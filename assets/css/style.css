@@ -4,3 +4,9 @@
 .card-body * {
     font-weight: bold;
 }
+[data-hide="hidden"] {
+    display: none;
+}
+[data-hide="visible"] {
+    display: block;
+}

@@ -9,33 +9,43 @@ const getTodaysDate = () => {
     return todaysDate;
 }
 
-
-let searchHistory = [];
-if (JSON.parse(localStorage.getItem("searchHistory"))) {
-    searchHistory = JSON.parse(localStorage.getItem("searchHistory")); 
-
+const renderCities = (history) => {
     $("#cities-wrapper").empty();
-    searchHistory.forEach(city => {
-        let button = $(`<button id="${city}">`);
+    history.forEach(city => {
+        idify = city.replace(/\s/g, '');
+        let button = $(`<button id="${idify}">`);
         $("#cities-wrapper").append(button);
-        $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
-        $(`#${city}`).text(city);
-        $(`#${city}`).on('click', function() {
+        $(`#${idify}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
+        $(`#${idify}`).text(city);
+        $(`#${idify}`).on('click', function() {
             $("#citysearch").val(`${city}`);
             queryWeather(city)
         });
     })
 }
 
+const toolTip = (err) => {
+    $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
+        setTimeout(function() {
+            $("#err").remove();
+    },2000);
+}
+
+let searchHistory = [];
+if (JSON.parse(localStorage.getItem("searchHistory"))) {
+    searchHistory = JSON.parse(localStorage.getItem("searchHistory")); 
+
+    renderCities(searchHistory);
+}
+
 
 // Update city and call query with fetch
-const queryWeather = (citName) => {
-    city = citName;
+const queryWeather = (cityName) => {
 
     // Collect data
     let weatherData;
 
-    fetch(`${getCoords}?q=${city}&appid=${apiKey}`)
+    fetch(`${getCoords}?q=${cityName}&appid=${apiKey}`)
     .then(function (response) {
         if (response.ok) {
             return response.json();
@@ -58,17 +68,14 @@ const queryWeather = (citName) => {
         })
         .then(function(oneCallSuccessData) {
             weatherData = oneCallSuccessData;
-            renderInfo(citName, weatherData);
-            console.log(citName, oneCallSuccessData)
+            renderInfo(cityName, weatherData);
         })
         .catch((err) => {
-            // Add feedback for user;
-            // Possible city incorrectly entered or not a city
+            toolTip("Is this a city?");
         });
     })
     .catch((err) => {
-        // Add feedback for user;
-        // Possible city incorrectly entered or not a city
+        toolTip("Is this a city?");
     });
     
 }
@@ -78,27 +85,35 @@ const queryWeather = (citName) => {
 const sanitiseEntry = (event) => {
     event.preventDefault();
 
-    let value = $("#citysearch").val()
-    let restrictions = /^[-a-zA-Z]+(\s+[-a-zA-Z]+)*$/;
+    let value = $("#citysearch").val();
+    let restrictions = /^[a-zA-Z\s]*$/;
 
     if (value.match(restrictions)) {
-        // Gives sanitised value;
-        city = value;
-    } else {
-        // Add feedback for user;
-    }
 
-    queryWeather(value);
-    
+        let uppercaseWords = value.split(" ");
+        let upperCased = [];
+        uppercaseWords.forEach(value => {
+            let upperCase = uppercaseWords[uppercaseWords.indexOf(value)][0].toUpperCase()
+            value = value.substring(1);
+            upperCased.push(`${upperCase}${value}`);
+        })
+        upperCased = upperCased.join(" ");
+
+        // Gives sanitised value;
+        queryWeather(upperCased);
+    } else {
+
+        toolTip("letters only");
+
+        return
+    }
 } 
 
 const renderInfo = (city, weather) => {
-    const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
-    city = uppercaseWords(city)
-
+    
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
-        $("#cityName").text(`${city} `);
+        $("#cityName").text(`${city}, ${weather.timezone} `);
         $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         // <!-- Temp -->
@@ -124,41 +139,17 @@ const renderInfo = (city, weather) => {
         
         
     let childArray = $("#searchForecast").children().children()
-    
-    $(`#${childArray[0].id}`).empty();
-    $(`#${childArray[0].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[1].dt)}</h5>`);
-    $(`#${childArray[0].id}`).append(`<img src="${iconURL}${weather.daily[1].weather[0].icon}@2x.png" class="card-text"></img>`);
-    $(`#${childArray[0].id}`).append(`<p class="card-text">Temp: ${weather.daily[1].temp.day}</p>`);
-    $(`#${childArray[0].id}`).append(`<p class="card-text">Wind: ${weather.daily[1].wind_speed}</p>`);
-    $(`#${childArray[0].id}`).append(`<p class="card-text">Humidity: ${weather.daily[1].humidity}</p>`);
+    let dailyWeather = weather.daily.slice(1, 6);
 
-    $(`#${childArray[1].id}`).empty();
-    $(`#${childArray[1].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[2].dt)}</h5>`);
-    $(`#${childArray[1].id}`).append(`<img src="${iconURL}${weather.daily[2].weather[0].icon}@2x.png" class="card-text"></img>`);
-    $(`#${childArray[1].id}`).append(`<p class="card-text">Temp: ${weather.daily[2].temp.day}</p>`);
-    $(`#${childArray[1].id}`).append(`<p class="card-text">Wind: ${weather.daily[2].wind_speed}</p>`);
-    $(`#${childArray[1].id}`).append(`<p class="card-text">Humidity: ${weather.daily[2].humidity}</p>`);
-
-    $(`#${childArray[2].id}`).empty();
-    $(`#${childArray[2].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[3].dt)}</h5>`);
-    $(`#${childArray[2].id}`).append(`<img src="${iconURL}${weather.daily[3].weather[0].icon}@2x.png" class="card-text"></img>`);
-    $(`#${childArray[2].id}`).append(`<p class="card-text">Temp: ${weather.daily[3].temp.day}</p>`);
-    $(`#${childArray[2].id}`).append(`<p class="card-text">Wind: ${weather.daily[3].wind_speed}</p>`);
-    $(`#${childArray[2].id}`).append(`<p class="card-text">Humidity: ${weather.daily[3].humidity}</p>`);
-
-    $(`#${childArray[3].id}`).empty();
-    $(`#${childArray[3].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[4].dt)}</h5>`);
-    $(`#${childArray[3].id}`).append(`<img src="${iconURL}${weather.daily[4].weather[0].icon}@2x.png" class="card-text"></img>`);
-    $(`#${childArray[3].id}`).append(`<p class="card-text">Temp: ${weather.daily[4].temp.day}</p>`);
-    $(`#${childArray[3].id}`).append(`<p class="card-text">Wind: ${weather.daily[4].wind_speed}</p>`);
-    $(`#${childArray[3].id}`).append(`<p class="card-text">Humidity: ${weather.daily[4].humidity}</p>`);
-
-    $(`#${childArray[4].id}`).empty();
-    $(`#${childArray[4].id}`).append(`<h5 class="card-title">${convertUnix(weather.daily[5].dt)}</h5>`);
-    $(`#${childArray[4].id}`).append(`<img src="${iconURL}${weather.daily[5].weather[0].icon}@2x.png" class="card-text"></img>`);
-    $(`#${childArray[4].id}`).append(`<p class="card-text">Temp: ${weather.daily[5].temp.day}</p>`);
-    $(`#${childArray[4].id}`).append(`<p class="card-text">Wind: ${weather.daily[5].wind_speed}</p>`);
-    $(`#${childArray[4].id}`).append(`<p class="card-text">Humidity: ${weather.daily[5].humidity}</p>`);
+    for (let i = 0; i < childArray.length; i++) {
+        $(`#${childArray[i].id}`).empty();
+        $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt)}</h5>`);
+        $(`#${childArray[i].id}`).append(`<img src="${iconURL}${dailyWeather[0].weather[0].icon}@2x.png" class="card-text"></img>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${dailyWeather[0].temp.day}</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed}</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Humidity: ${dailyWeather[0].humidity}</p>`);
+        dailyWeather.shift();
+    }
         
     updateHistory(city);
 
@@ -178,17 +169,7 @@ const updateHistory = (citySearched) => {
         localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
         // Render cities to page and add event listener to them
-        $("#cities-wrapper").empty();
-        searchHistory.forEach(city => {
-            let button = $(`<button id="${city}">`);
-            $("#cities-wrapper").append(button);
-            $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
-            $(`#${city}`).text(city);
-            $(`#${city}`).on('click', function() {
-                $("#citysearch").val(`${city}`);
-                queryWeather(city)
-            });
-        })
+        renderCities(searchHistory);
 
     } else if (!JSON.parse(localStorage.getItem("searchHistory")).includes(citySearched)) {
         
@@ -197,17 +178,7 @@ const updateHistory = (citySearched) => {
         localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
         // Render cities to page and add event listener to them
-        $("#cities-wrapper").empty();
-        searchHistory.forEach(city => {
-            let button = $(`<button id="${city}">`);
-            $("#cities-wrapper").append(button);
-            $(`#${city}`).addClass("col citySearch bg-info bg-gradient text-center rounded text-light mb-2");
-            $(`#${city}`).text(city);
-            $(`#${city}`).on('click', function() {
-                $("#citysearch").val(`${city}`);
-                queryWeather(city)
-            });
-        })
+        renderCities(searchHistory);
     }
 }
 

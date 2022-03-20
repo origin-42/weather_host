@@ -19,9 +19,11 @@
             <section class="col-3 container">
                 <article class="column search-wrapper mb-3 border-bottom border-primary pb-3">
                     <!-- Search for a City -->
-                    <label class="col" for="citysearch" title="Use only letters">Search for a City:</label>
-                    <input class="col mb-2" name="citysearch" id="citysearch" type="text">
-                    <button class="col bg-primary rounded text-light" id="citysearch_submit" type="submit">Search</button>
+                    <form action="">
+                        <label class="col" for="citysearch" title="Use only letters">Search for a City:</label>
+                        <input class="col mb-2" name="citysearch" id="citysearch" type="text">
+                        <button class="col bg-primary rounded text-light" id="citysearch_submit" type="submit">Search</button>
+                    </form>
                 </article>
                 <button id="clearHistory" class="col citySearch bg-primary text-center rounded text-light mb-2">Clear History</button>
                 <article id="cities-wrapper" class="column cities-wrapper"></article>
