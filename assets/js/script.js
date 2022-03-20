@@ -36,8 +36,8 @@ const toolTip = (err, query) => {
             window.open(`${googleFailedQuery}?q=${query}`,'_blank');
         })
         setTimeout(function() {
-            $("#err").remove();
             $(`#${query}`).remove();
+            $("#err").remove();
         },5000);
     } else {
         $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
