@@ -84,8 +84,9 @@ const queryWeather = (cityName) => {
 // Sanitise user entry
 const sanitiseEntry = (event) => {
     event.preventDefault();
-
+    
     let value = $("#citysearch").val();
+    value = value.trim();
     let restrictions = /^[a-zA-Z\s]*$/;
 
     if (value.match(restrictions)) {
