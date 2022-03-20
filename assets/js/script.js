@@ -5,11 +5,13 @@ let getCoords = `https://api.openweathermap.org/data/2.5/weather`;
 let iconURL = `https://openweathermap.org/img/wn/`;
 let googleFailedQuery = `https://maps.google.com/`;
 
+// Check date
 const getTodaysDate = () => {
     let todaysDate = new Date();
     return todaysDate;
 }
 
+// Add city data for forecast
 const renderCities = (history) => {
     $("#cities-wrapper").empty();
     history.forEach(city => {
@@ -25,6 +27,7 @@ const renderCities = (history) => {
     })
 }
 
+// Give user feedback on search errors
 const toolTip = (err, query) => {
     if (err === "Is this a city?") {
         $("#citysearch").after(`<p id="err" class="text-center bg-warning rounded text-light">${err}</p>`);
@@ -44,6 +47,7 @@ const toolTip = (err, query) => {
     }
 }
 
+// Get history from local storage
 let searchHistory = [];
 if (JSON.parse(localStorage.getItem("searchHistory"))) {
     searchHistory = JSON.parse(localStorage.getItem("searchHistory")); 
@@ -52,12 +56,13 @@ if (JSON.parse(localStorage.getItem("searchHistory"))) {
 }
 
 
-// Update city and call query with fetch
+// Update city and call user city query
 const queryWeather = (cityName) => {
     
     // Collect data
     let weatherData;
 
+    // Get coords to use with onecall
     fetch(`${getCoords}?q=${cityName}&appid=${apiKey}`)
     .then(function (response) {
         if (response.ok) {
@@ -71,6 +76,7 @@ const queryWeather = (cityName) => {
         let lat = weatherData.coord.lat;
         let lon = weatherData.coord.lon;
 
+        // Call data
         fetch(`${queryURLOneCall}?lat=${lat}&lon=${lon}&units={metric}&appid=${apiKey}`)
         .then(function (response) {
             if (response.ok) {
@@ -98,12 +104,14 @@ const queryWeather = (cityName) => {
 const sanitiseEntry = (event) => {
     event.preventDefault();
     
+    // Check for letters only
     let value = $("#citysearch").val();
     value = value.trim();
     let restrictions = /^[a-zA-Z\s]*$/;
 
     if (value.match(restrictions)) {
 
+        // Uppercase for visual value
         let uppercaseWords = value.split(" ");
         let upperCased = [];
         uppercaseWords.forEach(value => {
@@ -119,7 +127,7 @@ const sanitiseEntry = (event) => {
 
         toolTip("letters only");
 
-        return
+        return;
     }
 } 
 
@@ -137,13 +145,9 @@ const renderInfo = (city, weather) => {
         $("#cityName").text(`${city}, ${weather.timezone} `);
         $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
-        // <!-- Temp -->
         $("#cityTemp").text(`Temperature: ${weather.current.temp} Celsius`);
-        // <!-- Wind -->
         $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed} M/S`);
-        // <!-- Humidity -->
         $("#cityHimidity").text(`Humidity: ${weather.current.humidity}%`);
-        // <!-- UV Index -->
         $("#cityUVIndex").text(`UV Index: `);
         $("#uvBackground").text(`${weather.current.uvi}`);
         $("#uvBackground").addClass("rounded px-3 text-light");
@@ -189,7 +193,7 @@ const updateHistory = (citySearched) => {
         
         localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
-        // Render cities to page and add event listener to them
+        // Render cities to page
         renderCities(searchHistory);
 
     } else if (!JSON.parse(localStorage.getItem("searchHistory")).includes(citySearched)) {
@@ -198,11 +202,12 @@ const updateHistory = (citySearched) => {
         
         localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
-        // Render cities to page and add event listener to them
+        // Render cities to page
         renderCities(searchHistory);
     }
 }
 
+// Convert passed in unix time
 const convertUnix = (unix) => {
     let unixDate = unix;
     let date = new Date(unixDate * 1000);
