@@ -1,3 +1,4 @@
+// global variables
 let apiKey = 'd3ddf23d533942a91d17b7f565e673f9';
 let queryURLOneCall = `https://api.openweathermap.org/data/2.5/onecall`;
 let getCoords = `https://api.openweathermap.org/data/2.5/weather`;
@@ -53,7 +54,7 @@ if (JSON.parse(localStorage.getItem("searchHistory"))) {
 
 // Update city and call query with fetch
 const queryWeather = (cityName) => {
-
+    
     // Collect data
     let weatherData;
 
@@ -70,7 +71,7 @@ const queryWeather = (cityName) => {
         let lat = weatherData.coord.lat;
         let lon = weatherData.coord.lon;
 
-        fetch(`${queryURLOneCall}?lat=${lat}&lon=${lon}&units={imperial}&appid=${apiKey}`)
+        fetch(`${queryURLOneCall}?lat=${lat}&lon=${lon}&units={metric}&appid=${apiKey}`)
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -137,11 +138,11 @@ const renderInfo = (city, weather) => {
         $("#searchDate").text(`(${convertUnix(weather.current.dt)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         // <!-- Temp -->
-        $("#cityTemp").text(`Temperature: ${weather.current.temp}`);
+        $("#cityTemp").text(`Temperature: ${weather.current.temp} Celsius`);
         // <!-- Wind -->
-        $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed}`);
+        $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed} M/S`);
         // <!-- Humidity -->
-        $("#cityHimidity").text(`Humidity: ${weather.current.humidity}`);
+        $("#cityHimidity").text(`Humidity: ${weather.current.humidity}%`);
         // <!-- UV Index -->
         $("#cityUVIndex").text(`UV Index: `);
         $("#uvBackground").text(`${weather.current.uvi}`);
@@ -165,9 +166,9 @@ const renderInfo = (city, weather) => {
         $(`#${childArray[i].id}`).empty();
         $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt)}</h5>`);
         $(`#${childArray[i].id}`).append(`<img src="${iconURL}${dailyWeather[0].weather[0].icon}@2x.png" class="card-text"></img>`);
-        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${dailyWeather[0].temp.day}</p>`);
-        $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed}</p>`);
-        $(`#${childArray[i].id}`).append(`<p class="card-text">Humidity: ${dailyWeather[0].humidity}</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${dailyWeather[0].temp.day} Celsius</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed} M/S</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Humidity: ${dailyWeather[0].humidity}%</p>`);
         dailyWeather.shift();
     }
         

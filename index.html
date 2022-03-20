@@ -25,31 +25,25 @@
                         <button class="col bg-primary rounded text-light" id="citysearch_submit" type="submit">Search</button>
                     </form>
                 </article>
+                <!-- Search History -->
                 <button id="clearHistory" class="col citySearch bg-primary text-center rounded text-light mb-2">Search History</button>
                 <article id="cities-wrapper" class="column cities-wrapper"></article>
-                
                 
             </section>
     
             <!-- Search Information -->
             <section class="col-9 container" id="searchContainer" data-hide="hidden">
-                <!-- Displayed information for City -->
+                <!-- Displayed information for current search -->
                 <article class="column searchResults border border-2 mb-2 p-2">
-                    <!-- City name, date, and weather icon -->
                     <h2><span id="cityName"></span><span id="searchDate"></span><img id="weatherIcon" src=""></img></h2>
-                    <!-- Temp -->
                     <p><span id="cityTemp"></span></p>
-                    <!-- Wind -->
                     <p><span id="cityWind"></span></p>
-                    <!-- Humidity -->
                     <p><span id="cityHimidity"></span></p>
-                    <!-- UV Index -->
                     <p><span id="cityUVIndex"></span><span id="uvBackground"></span></p>
                 </article>
 
                 <!-- 5 day forecase -->
                 <section id="searchForecast" class="container row justify-content-between searchForecast">
-                    <!-- Day 1 -->
                     <article class="col card ml-1 bg-secondary text-light" style="width: 18rem;">
                         <div id="dayTwo" class="card-body"></div>
                     </article>
