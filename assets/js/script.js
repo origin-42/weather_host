@@ -127,6 +127,9 @@ const renderInfo = (city, weather) => {
     if (weather && $("#searchContainer").attr('data-hide', 'hidden')) {
         $("#searchContainer").attr('data-hide', 'visible');
     }
+    if ($("#clearHistory").text("Search History")) {
+        $("#clearHistory").text("Clear History");
+    }
     
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
@@ -215,4 +218,7 @@ $("#clearHistory").on('click', function() {
     $("#cities-wrapper").empty();
     searchHistory = [];
     localStorage.clear()
+    if ($("#clearHistory").text("Clear History")) {
+        $("#clearHistory").text("Search History");
+    }
 })
