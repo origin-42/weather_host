@@ -61,6 +61,10 @@ if (searchHistory) {
 
 // Update city and call user city query
 const queryWeather = (cityName) => {
+
+    // Provide loading feedback
+    $("body").css("cursor", "wait");
+    setTimeout(function() {$("body").css("cursor", "default")}, 1500);
     
     // Collect data
     let weatherData;
