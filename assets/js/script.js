@@ -150,7 +150,7 @@ const renderInfo = (city, weather) => {
     // <!-- Displayed information for weather -->
         // <!-- City name, date, and weather icon -->
         $("#cityName").text(`${city}, ${weather.timezone} `);
-        $("#searchDate").text(`(${convertUnix(weather.current.dt, 0)})`);
+        $("#searchDate").text(`(${convertUnix(weather.current.dt, 1)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
         $("#cityTemp").text(`Temperature: ${weather.current.temp} °F`);
         $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed} MPH`);
@@ -167,8 +167,6 @@ const renderInfo = (city, weather) => {
         } else if (weather.current.uvi < 3) {
             $("#uvBackground").addClass("bg-success");
         }
-
-        
         
     let childArray = $("#searchForecast").children().children()
     let dailyWeather = weather.daily.slice(1, 6);
