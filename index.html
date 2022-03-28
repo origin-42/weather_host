@@ -14,13 +14,13 @@
 </head>
 <body>
     <main>
-        <h1 class="text-center bg-info bg-gradient p-3 text-light border-bottom border-primary">Weather Host</h1>
+        <h1 class="text-center p-3 text-light">Your Weather Host</h1>
         <div class="container-fluid row">
             <section class="col-3 container">
                 <article class="column search-wrapper mb-3 border-bottom border-primary pb-3">
                     <!-- Search for a City -->
                     <form action="">
-                        <label class="col" for="citysearch" title="Use only letters">Search for a City:</label>
+                        <label class="col" for="citysearch" id="citysearch_label" title="Use only letters">Search for a City</label>
                         <input class="col mb-2" name="citysearch" id="citysearch" type="text">
                         <button class="col bg-primary rounded text-light" id="citysearch_submit" type="submit">Search</button>
                     </form>
@@ -34,7 +34,7 @@
             <!-- Search Information -->
             <section class="col-9 container" id="searchContainer" data-hide="hidden">
                 <!-- Displayed information for current search -->
-                <article class="column searchResults border border-2 mb-2 p-2">
+                <article class="column searchResults mb-2 p-2">
                     <h2><span id="cityName"></span><span id="searchDate"></span><img id="weatherIcon" src=""></img></h2>
                     <p><span id="cityTemp"></span></p>
                     <p><span id="cityWind"></span></p>

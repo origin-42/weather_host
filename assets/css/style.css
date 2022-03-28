@@ -1,5 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre&family=Syne+Mono&display=swap');
+
+:root {
+
+    --title-font: 'Proza Libre', sans-serif;
+
+}
+
+main {
+    background: linear-gradient(rgb(47, 191, 235), white);
+    height: 100vh;
+}
+#citysearch_label {
+    font-family: var(--title-font);
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.2rem;
+}
 .citySearch {
     cursor: pointer;
+}
+.card {
+    background: linear-gradient( 45deg, white, rgb(47, 191, 235), white );
 }
 .card-body * {
     font-weight: bold;
