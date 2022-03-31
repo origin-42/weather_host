@@ -175,7 +175,7 @@ const renderInfo = (city, weather) => {
         $(`#${childArray[i].id}`).empty();
         $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt, 1)}</h5>`);
         $(`#${childArray[i].id}`).append(`<img src="${iconURL}${dailyWeather[0].weather[0].icon}@2x.png" class="card-text"></img>`);
-        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${math.floor(dailyWeather[0].temp.day - 273.15)} °C</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${Math.floor(dailyWeather[0].temp.day - 273.15)} °C</p>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed} MPH</p>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Humidity: ${dailyWeather[0].humidity}%</p>`);
         dailyWeather.shift();
