@@ -152,7 +152,7 @@ const renderInfo = (city, weather) => {
         $("#cityName").text(`${city}, ${weather.timezone} `);
         $("#searchDate").text(`(${convertUnix(weather.current.dt, 1)})`);
         $("#weatherIcon").attr("src", `${iconURL}${weather.current.weather[0].icon}@2x.png`);
-        $("#cityTemp").text(`Temperature: ${weather.current.temp} °F`);
+        $("#cityTemp").text(`Temperature: ${Math.floor(weather.current.temp - 273.15)} °C`);
         $("#cityWind").text(`Wind Speed: ${weather.current.wind_speed} MPH`);
         $("#cityHimidity").text(`Humidity: ${weather.current.humidity}%`);
         $("#cityUVIndex").text(`UV Index: `);
@@ -175,7 +175,7 @@ const renderInfo = (city, weather) => {
         $(`#${childArray[i].id}`).empty();
         $(`#${childArray[i].id}`).append(`<h5 class="card-title">${convertUnix(dailyWeather[0].dt, 1)}</h5>`);
         $(`#${childArray[i].id}`).append(`<img src="${iconURL}${dailyWeather[0].weather[0].icon}@2x.png" class="card-text"></img>`);
-        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${dailyWeather[0].temp.day} °F</p>`);
+        $(`#${childArray[i].id}`).append(`<p class="card-text">Temp: ${math.floor(dailyWeather[0].temp.day - 273.15)} °C</p>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Wind: ${dailyWeather[0].wind_speed} MPH</p>`);
         $(`#${childArray[i].id}`).append(`<p class="card-text">Humidity: ${dailyWeather[0].humidity}%</p>`);
         dailyWeather.shift();
